@@ -1,0 +1,20 @@
+name: Generate Daily Blog Post
+on:
+  schedule:
+    - cron: '0 0 * * *' # Körs varje natt kl 00:00
+  workflow_dispatch: # Gör att du kan starta den manuellt för att testa
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run blog script
+        run: node generate-blog.js
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Added 3 new daily blog posts" || exit 0
+          git push
