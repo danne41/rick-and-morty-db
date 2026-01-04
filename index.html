@@ -1,12 +1,8 @@
-<p>2026-01-04: <a href="blog/character-301.html" style="color: #97ce4c;">Analys: Ron Benson</a></p>
-<p>2026-01-04: <a href="blog/character-776.html" style="color: #97ce4c;">Analys: Gotron Pilot</a></p>
-<p>2026-01-04: <a href="blog/character-94.html" style="color: #97ce4c;">Analys: Diane Sanchez</a></p>
 <!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Upptäck alla karaktärer från Rick and Morty. En fullständig databas med stats och info.">
     <title>Rick and Morty Multiverse Database</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,35 +14,25 @@
         <a href="privacy.html" style="color: #97ce4c; margin: 0 15px; text-decoration: none; font-weight: bold;">Integritet</a>
     </nav>
     <h1>Rick & Morty Database</h1>
-    <p>Hitta din favoritkaraktär i multiversumet</p>
-    <input type="text" id="search" placeholder="Sök karaktär (t.ex. Pickle Rick)...">
+    <input type="text" id="search" placeholder="Sök karaktär...">
 </header>
 
-<section id="daily-content" style="margin-top: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
+<section id="daily-content" style="max-width: 800px; margin: 40px auto; text-align: left;">
     <h2 style="color: #97ce4c; text-align: center;">Dagens Utvalda Karaktärer</h2>
     
-    <div id="latest-posts" style="background: rgba(60, 62, 68, 0.8); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #97ce4c;">
-        </div>
+    <div id="latest-posts" style="background: rgba(60, 62, 68, 0.8); padding: 20px; border-radius: 10px; border-left: 5px solid #97ce4c; min-height: 50px;">
+</div>
 
-    <details style="background: #3c3e44; padding: 15px; border-radius: 10px; cursor: pointer;">
+    <details style="background: #3c3e44; padding: 15px; border-radius: 10px; cursor: pointer; margin-top: 20px;">
         <summary style="color: #97ce4c; font-weight: bold;">Visa tidigare analyser (Arkiv)</summary>
-        <div id="archive-list" style="margin-top: 15px; max-height: 300px; overflow-y: auto; padding-right: 10px;">
-            </div>
+        <div id="archive-list" style="margin-top: 15px; max-height: 250px; overflow-y: auto;">
+</div>
     </details>
 </section>
 
 <main id="character-container">
-    <div class="loader">Hämtar data från portalen...</div>
+    <div class="loader">Laddar multiversumet...</div>
 </main>
-
-<footer>
-    <p>&copy; 2026 Rick & Morty Fan Site</p>
-</footer>
-
-<div id="cookie-banner" style="position: fixed; bottom: 0; width: 100%; background: #000; color: #fff; padding: 15px; text-align: center; z-index: 9999; font-size: 14px;">
-    Denna sida använder cookies för annonsering. Genom att fortsätta godkänner du vår <a href="privacy.html" style="color: #97ce4c;">integritetspolicy</a>.
-    <button onclick="document.getElementById('cookie-banner').style.display='none'" style="margin-left: 20px; background: #97ce4c; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Jag förstår</button>
-</div>
 
 <script src="script.js"></script>
 </body>
