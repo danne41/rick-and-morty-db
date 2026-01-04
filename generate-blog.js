@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-// En liten funktion för att vänta, så vi inte stressar API-servern
+// Funktion för att vänta, så vi inte stressar API-servern
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function createMultiplePosts(count) {
@@ -18,14 +18,12 @@ async function createMultiplePosts(count) {
             if (!response.ok) throw new Error(`API-fel: ${response.status}`);
             
             const char = await response.json();
-
             const fileName = `blog/character-${char.id}.html`;
             const postTitle = `Allt om ${char.name}`;
             const date = new String(new Date().toLocaleDateString('sv-SE'));
 
-            // 3. Skapa HTML-innehållet
-            const html = `
-<!DOCTYPE html>
+            // 3. Skapa HTML-innehållet för blogginlägget
+            const html = `<!DOCTYPE html>
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
@@ -64,18 +62,14 @@ async function createMultiplePosts(count) {
             
             console.log(`Inlägg skapat för ${char.name}`);
 
-            // Vänta 1 sekund innan nästa hämtning för att undvika ECONNRESET
+            // Pausa 1 sekund
             await sleep(1000);
 
         } catch (err) {
-            console.error(`Kunde inte skapa inlägg nummer ${i + 1}:`, err.message);
+            console.error(`Fel vid inlägg ${i + 1}:`, err.message);
         }
     }
 }
 
+// Kör funktionen för att skapa 3 inlägg
 createMultiplePosts(3);
-    });
-
-    rssContent += `</channel></rss>`;
-    fs.writeFileSync('feed.xml', rssContent);
-}
