@@ -90,6 +90,26 @@ searchInput.addEventListener('input', (e) => {
     );
     displayCharacters(filtered);
 });
+// 4. Uppdatera index.html med flytt-logik
+            let indexHtml = fs.readFileSync('index.html', 'utf8');
+            
+            // Hämta ut det som ligger i "Dagens" just nu
+            const dailyRegex = /([\s\S]*?)/;
+            const currentDaily = indexHtml.match(dailyRegex)[1].trim();
+
+            if (i === 0) { // Bara vid första inlägget för dagen: Flytta gamla till arkivet
+                if (currentDaily !== "") {
+                    indexHtml = indexHtml.replace('', `\n${currentDaily}`);
+                }
+                // Rensa dagens-sektionen
+                indexHtml = indexHtml.replace(dailyRegex, '\n');
+            }
+
+            // Lägg till det nya inlägget i dagens-sektionen
+            const newLink = `<p>${date}: <a href="${fileName}" style="color: #97ce4c; text-decoration: none; font-weight: bold;">› Analys: ${char.name}</a></p>`;
+            indexHtml = indexHtml.replace('', `\n${newLink}`);
+
+            fs.writeFileSync('index.html', indexHtml);
 
 // Starta programmet
 fetchAllCharacters();
