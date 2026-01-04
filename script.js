@@ -2,37 +2,43 @@ const container = document.getElementById('character-container');
 const searchInput = document.getElementById('search');
 let allCharacters = [];
 
-// Vi definierar funktionen som en asynkron funktion
+// 1. Hämta alla karaktärer från API:et
 async function fetchAllCharacters() {
     let url = 'https://rickandmortyapi.com/api/character';
-    
     try {
-        // Vi tömmer containern och visar ett laddningsmeddelande
-        container.innerHTML = '<p>Öppnar portalen till alla dimensioner...</p>';
-
+        container.innerHTML = '<p class="loader-text">Öppnar portalen till alla dimensioner...</p>';
         while (url) {
             const response = await fetch(url);
             const data = await response.json();
-            
-            // Lägg till de nya karaktärerna i vår stora lista
             allCharacters = [...allCharacters, ...data.results];
-            
-            // Uppdatera URL:en till nästa sida
             url = data.info.next;
-            
-            // Vi ritar ut dem vi har hittills
             displayCharacters(allCharacters);
         }
     } catch (error) {
-        console.error("Det blev ett fel:", error);
-        container.innerHTML = "<p>Något gick fel i multiversumet... Kontrollera din internetanslutning.</p>";
+        console.error("Fel vid hämtning:", error);
+        container.innerHTML = "<p>Något gick fel i multiversumet...</p>";
     }
 }
 
+// 2. Visa karaktärerna och skapa den personliga beskrivningen
 function displayCharacters(characters) {
-    // Skapa en lång sträng med HTML för att undvika att skriva till DOM för ofta (snabbare)
     const htmlString = characters.map(char => {
         const statusClass = char.status.toLowerCase();
+        
+        // --- PERSONLIG BESKRIVNINGS-LOGIK ---
+        let bio = "";
+        const name = char.name;
+        const species = char.species === 'unknown' ? 'okänd art' : char.species.toLowerCase();
+        const origin = char.origin.name === 'unknown' ? 'en okänd plats' : char.origin.name;
+
+        if (char.status === 'Alive') {
+            bio = `Möt ${name}, en ${species} som lyckats överleva multiversumets alla faror! Just nu befinner sig ${name} på ${char.location.name}. Ursprungligen kommer detta ansikte från ${origin}.`;
+        } else if (char.status === 'Dead') {
+            bio = `Frid över ${name}. Denna ${species} har tyvärr mött sitt öde i en av de många dimensionerna. Innan det tragiska slutet kunde man hitta ${name} på ${origin}.`;
+        } else {
+            bio = `${name} är ett mysterium! Ingen vet säkert om denna ${species} lever eller är död. Senast siktad vid ${char.location.name}, men ursprunget spåras till ${origin}.`;
+        }
+
         return `
             <div class="card">
                 <img src="${char.image}" alt="${char.name}" loading="lazy">
@@ -42,8 +48,17 @@ function displayCharacters(characters) {
                         <span class="status-icon ${statusClass}"></span>
                         ${char.status} - ${char.species}
                     </div>
-                    <p style="color: #9e9e9e; font-size: 0.8rem; margin-bottom: 4px;">Senast sedd i:</p>
-                    <p style="margin-top: 0;">${char.location.name}</p>
+                    
+                    <button class="details-btn" onclick="toggleDetails(this)">Vem är detta?</button>
+                    
+                    <div class="extra-info">
+                        <p>${bio}</p>
+                        <hr style="border: 0; border-top: 1px solid #444; margin: 10px 0;">
+                        <p style="font-size: 0.75rem; color: #97ce4c;">
+                            <strong>Dimensionell data:</strong><br>
+                            Medverkar i ${char.episode.length} avsnitt.
+                        </p>
+                    </div>
                 </div>
             </div>
         `;
@@ -52,7 +67,22 @@ function displayCharacters(characters) {
     container.innerHTML = htmlString;
 }
 
-// Sökfunktion
+// 3. Funktion för att öppna/stänga beskrivningen (Viktig!)
+function toggleDetails(btn) {
+    const infoDiv = btn.nextElementSibling;
+    const isShowing = infoDiv.classList.contains('show');
+    
+    // Stäng alla andra öppna boxar för en snyggare upplevelse
+    document.querySelectorAll('.extra-info').forEach(el => el.classList.remove('show'));
+    document.querySelectorAll('.details-btn').forEach(b => b.innerText = 'Vem är detta?');
+
+    if (!isShowing) {
+        infoDiv.classList.add('show');
+        btn.innerText = 'Dölj info';
+    }
+}
+
+// 4. Sökfunktion
 searchInput.addEventListener('input', (e) => {
     const value = e.target.value.toLowerCase();
     const filtered = allCharacters.filter(char => 
@@ -61,5 +91,5 @@ searchInput.addEventListener('input', (e) => {
     displayCharacters(filtered);
 });
 
-// Starta hämtningen - Detta anrop är säkert här
+// Starta programmet
 fetchAllCharacters();
